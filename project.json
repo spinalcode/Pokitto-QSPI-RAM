@@ -1,0 +1,740 @@
+{
+	"lastBuffer": "main.cpp",
+	"PNGFlags": {
+		"ALL": [
+			"palette=${appPath}/PokittoLib/Pokitto/POKITTO_CORE/PALETTES/palCGA.cpp"
+		]
+	},
+	"libs": {
+		"Pokitto": [
+			{
+				"recurse": "${appPath}/PokittoLib/Pokitto",
+				"ignore": "POKITTO_SIM|POKITTO_XTERNALS|Documentation|examples?|Physics|(?:.*_SIM.*)|main.cpp"
+			}
+		],
+		"linux": "Desktop",
+		"windows": "Desktop",
+		"darwin": "Desktop",
+		"Desktop": [
+			{
+				"recurse": "${appPath}/PokittoLib/Pokitto",
+				"ignore": "BmpImage.cpp|ChaN|old_32bitSDL|libpff|SDFileSystem|File/ChaN|USBDevice|tinydir/tests|tinydir/samples|JoyHat|mbed-pokitto|POKITTO_HW|POKITTO_XTERNALS|PokittoDisk.cpp|PokittoBattery.cpp|Documentation|examples?|Physics|main.cpp|Pokitto_simsound.cpp"
+			}
+		]
+	},
+	"SFlags": {
+		"Pokitto": [
+			"-I${projectPath}",
+			"-mcpu=cortex-m0plus",
+			"-mthumb"
+		]
+	},
+	"CPPFlags": {
+		"DEBUG": [
+			"-Og",
+			"-g3",
+			"-ggdb"
+		],
+		"RELEASE": [
+			"-O3"
+		],
+		"Pokitto": [
+			"-I${projectPath}",
+			"-DPOKITTO",
+			"-fno-rtti",
+			"-Wno-pointer-arith",
+			"-c",
+			"-fno-exceptions",
+			"-fno-builtin",
+			"-ffunction-sections",
+			"-fdata-sections",
+			"-funsigned-char",
+			"-MMD",
+			"-fno-delete-null-pointer-checks",
+			"-fomit-frame-pointer",
+			"-mcpu=cortex-m0plus",
+			"-mthumb",
+			"-Wno-psabi",
+			"-Wno-conversion-null",
+			"-Wno-narrowing",
+			"-Wno-write-strings",
+			"-DTARGET_LPC11U68",
+			"-D__MBED__=1",
+			"-DDEVICE_I2CSLAVE=1",
+			"-DTARGET_LIKE_MBED",
+			"-DTARGET_NXP",
+			"-D__MBED_CMSIS_RTOS_CM",
+			"-DDEVICE_RTC=1",
+			"-DTOOLCHAIN_object",
+			"-D__CMSIS_RTOS",
+			"-DTOOLCHAIN_GCC",
+			"-DTARGET_CORTEX_M",
+			"-DTARGET_M0P",
+			"-DTARGET_UVISOR_UNSUPPORTED",
+			"-DDEVICE_SERIAL=1",
+			"-DDEVICE_INTERRUPTIN=1",
+			"-DTARGET_LPCTarget",
+			"-DTARGET_CORTEX",
+			"-DDEVICE_I2C=1",
+			"-D__CORTEX_M0PLUS",
+			"-DTARGET_FF_ARDUINO",
+			"-DTARGET_RELEASE",
+			"-DMBED_BUILD_TIMESTAMP=1526394586.66",
+			"-DARM_MATH_CM0PLUS",
+			"-DTARGET_LPC11U6X",
+			"-DDEVICE_SLEEP=1",
+			"-DTOOLCHAIN_GCC_ARM",
+			"-DDEVICE_SPI=1",
+			"-DDEVICE_ANALOGIN=1",
+			"-DDEVICE_PWMOUT=1",
+			"-DTARGET_LIKE_CORTEX_M0"
+		],
+		"Desktop": [
+			"-I${projectPath}",
+			"-DPOK_SIM",
+			"-Wall",
+			"-std=gnu++17",
+			"-fsigned-char",
+			"-DPOK_SIM",
+			"-fno-rtti",
+			"-Wno-pointer-arith",
+			"-c",
+			"-fno-builtin",
+			"-ffunction-sections",
+			"-fdata-sections",
+			"-funsigned-char",
+			"-MMD",
+			"-fno-delete-null-pointer-checks"
+		],
+		"ALL": [
+			"-std=c++17"
+		],
+		"linux": {
+			"extend": "Desktop",
+			"flags": [
+				"-DPROJ_LINUX=1",
+				"-D_REENTRANT"
+			]
+		},
+		"windows": "Desktop"
+	},
+	"CFlags": {
+		"DEBUG": [
+			"-Og",
+			"-g3",
+			"-ggdb"
+		],
+		"RELEASE": [
+			"-O3"
+		],
+		"Pokitto": [
+			"-I${projectPath}",
+			"-DPOKITTO",
+			"-Wno-pointer-arith",
+			"-c",
+			"-fno-exceptions",
+			"-fno-builtin",
+			"-ffunction-sections",
+			"-fdata-sections",
+			"-funsigned-char",
+			"-MMD",
+			"-fno-delete-null-pointer-checks",
+			"-fomit-frame-pointer",
+			"-mcpu=cortex-m0plus",
+			"-mthumb",
+			"-Wno-psabi",
+			"-Wwrite-strings",
+			"-DTARGET_LPC11U68",
+			"-D__MBED__=1",
+			"-DDEVICE_I2CSLAVE=1",
+			"-DTARGET_LIKE_MBED",
+			"-DTARGET_NXP",
+			"-D__MBED_CMSIS_RTOS_CM",
+			"-DDEVICE_RTC=1",
+			"-DTOOLCHAIN_object",
+			"-D__CMSIS_RTOS",
+			"-DTOOLCHAIN_GCC",
+			"-DTARGET_CORTEX_M",
+			"-DTARGET_M0P",
+			"-DTARGET_UVISOR_UNSUPPORTED",
+			"-DDEVICE_SERIAL=1",
+			"-DDEVICE_INTERRUPTIN=1",
+			"-DTARGET_LPCTarget",
+			"-DTARGET_CORTEX",
+			"-DDEVICE_I2C=1",
+			"-D__CORTEX_M0PLUS",
+			"-DTARGET_FF_ARDUINO",
+			"-DTARGET_RELEASE",
+			"-DMBED_BUILD_TIMESTAMP=1526394586.66",
+			"-DARM_MATH_CM0PLUS",
+			"-DTARGET_LPC11U6X",
+			"-DDEVICE_SLEEP=1",
+			"-DTOOLCHAIN_GCC_ARM",
+			"-DDEVICE_SPI=1",
+			"-DDEVICE_ANALOGIN=1",
+			"-DDEVICE_PWMOUT=1",
+			"-DTARGET_LIKE_CORTEX_M0"
+		],
+		"Desktop": [
+			"-I${projectPath}",
+			"-DPOK_SIM",
+			"-Wall",
+			"-fsigned-char",
+			"-DPOK_SIM",
+			"-Wno-pointer-arith",
+			"-c",
+			"-fno-builtin",
+			"-ffunction-sections",
+			"-fdata-sections",
+			"-funsigned-char",
+			"-MMD",
+			"-fno-delete-null-pointer-checks"
+		],
+		"ALL": [],
+		"linux": "Desktop",
+		"windows": "Desktop",
+		"darwin": "Desktop"
+	},
+	"GDBFlags": {
+		"Pokitto": [
+			"${projectPath}/${projectName}.elf"
+		]
+	},
+	"emuFlags": {
+		"Pokitto": [
+			"${projectPath}/${projectName}.bin"
+		]
+	},
+	"ELF2BINFlags": {
+		"Pokitto": [
+			"-O",
+			"binary",
+			"${projectPath}/${projectName}.elf",
+			"${projectPath}/${projectName}.bin"
+		]
+	},
+	"LDFlags": {
+		"RELEASE": [
+			"-O3"
+		],
+		"DEBUG": [
+			"-Og",
+			"-g3",
+			"-ggdb"
+		],
+		"Pokitto": [
+			"-Wl,--gc-sections",
+			"-Wl,-n",
+			"--specs=nano.specs",
+			"-mcpu=cortex-m0plus",
+			"-mthumb",
+			"-Wl,--undefined=g_pfnVectors",
+			"-Wl,--undefined=boot",
+			"-T",
+			"${appPath}/PokittoLib/Pokitto/mbed-pokitto/targets/cmsis/TARGET_NXP/TARGET_LPC11U6X/TOOLCHAIN_GCC_ARM/TARGET_LPC11U68/LPC11U68.ld",
+			"--output",
+			"${projectPath}/${projectName}.elf",
+			"$objectFiles",
+			"-Wl,--start-group",
+			"-lstdc++",
+			"-lsupc++",
+			"-lm",
+			"-lc",
+			"-lgcc",
+			"-lnosys",
+			"-Wl,--end-group"
+		],
+		"linux": [
+			"$objectFiles",
+			"-lpthread",
+			"-lSDL2",
+			"--output",
+			"${projectPath}/${projectName}"
+		],
+		"windows": [
+			"-static",
+			"-lmingw32",
+			"-L${appPath}/PokittoLib/Pokitto/POKITTO_SIM/SDL2/lib",
+			"-lSDL2main",
+			"-lSDL2",
+			"-lm",
+			"-ldinput8",
+			"-ldxguid",
+			"-ldxerr8",
+			"-luser32",
+			"-lgdi32",
+			"-lwinmm",
+			"-limm32",
+			"-lole32",
+			"-loleaut32",
+			"-lshell32",
+			"-lversion",
+			"-luuid",
+			"-lsetupapi",
+			"-static-libgcc",
+			"-mwindows",
+			"--output",
+			"${projectPath}/${projectName}.exe",
+			"$objectFiles"
+		]
+	},
+	"target": "Pokitto",
+	"pipelines": {
+		"Pokitto": [
+			"img-to-c",
+			"compile-cpp",
+			"compile-ld",
+			"compile-bin",
+			"make-img"
+		],
+		"Desktop": [
+			"img-to-c",
+			"compile-cpp",
+			"compile-ld"
+		],
+		"linux": "Desktop",
+		"windows": "Desktop"
+	},
+	"meta": {
+		"": {},
+		"/Bacon.png": {
+			"sdcard": false
+		},
+		"/Hello CPP.bin": {
+			"sdcard": false
+		},
+		"/File.cpp": {
+			"sdcard": false
+		},
+		"/Hello CPP.elf": {
+			"sdcard": false
+		},
+		"/My_settings.h": {
+			"sdcard": false
+		},
+		"/Smile.h": {
+			"sdcard": false
+		},
+		"/Smile.png": {
+			"sdcard": false
+		},
+		"/Test.h": {
+			"sdcard": false
+		},
+		"/Test.png": {
+			"sdcard": true
+		},
+		"/main.cpp": {
+			"sdcard": false
+		},
+		"/project.json": {
+			"sdcard": false
+		},
+		"\\main.cpp": {
+			"sdcard": false
+		},
+		"\\Hello CPP.elf": {
+			"sdcard": false
+		},
+		"\\Hello CPP.bin": {
+			"sdcard": false
+		},
+		"\\My_settings.h": {
+			"sdcard": false
+		},
+		"\\project.json": {
+			"sdcard": false
+		},
+		"\\Smile.h": {
+			"sdcard": false
+		},
+		"\\Smile.png": {
+			"sdcard": false
+		},
+		"\\Hello CPP.bin.1.png": {
+			"sdcard": false
+		},
+		"\\Hello CPP.bin.1.h": {
+			"sdcard": false
+		},
+		"\\FMRadio.elf": {
+			"sdcard": false
+		},
+		"\\FMRadio.bin": {
+			"sdcard": false
+		},
+		"\\FMRadio.bin.1.png": {
+			"sdcard": false
+		},
+		"\\RDA5807M.cpp": {
+			"sdcard": false
+		},
+		"\\RDA5807M.h": {
+			"sdcard": false
+		},
+		"\\FMRadio.bin.1.h": {
+			"sdcard": false
+		},
+		"\\controls.h": {
+			"sdcard": false
+		},
+		"\\New folder": {
+			"sdcard": false
+		},
+		"\\Raw": {
+			"sdcard": false
+		},
+		"\\Raw\\font.png": {
+			"sdcard": false
+		},
+		"\\Raw\\16col.png": {
+			"sdcard": false
+		},
+		"\\Raw\\Newtonsoft.Json.dll": {
+			"sdcard": false
+		},
+		"\\Raw\\_img2pok.exe": {
+			"sdcard": false
+		},
+		"\\New Text Document.txt": {
+			"sdcard": false
+		},
+		"\\font.h": {
+			"sdcard": false
+		},
+		"\\Raw\\font.h": {
+			"sdcard": false
+		},
+		"\\Raw\\16col.h": {
+			"sdcard": false
+		},
+		"\\Raw\\font2.png": {
+			"sdcard": false
+		},
+		"\\Raw\\SavC6B7.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\font2.h": {
+			"sdcard": false
+		},
+		"\\Raw\\needle.png": {
+			"sdcard": false
+		},
+		"\\Raw\\needle.h": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav27B2.tmp": {
+			"sdcard": false
+		},
+		"\\SoftI2C.cpp": {
+			"sdcard": false
+		},
+		"\\SoftI2C.h": {
+			"sdcard": false
+		},
+		"\\FMRadio_2.0.elf": {
+			"sdcard": false
+		},
+		"\\FMRadio_2.0.bin": {
+			"sdcard": false
+		},
+		"\\FMRadio_2.0.zip": {
+			"sdcard": false
+		},
+		"\\FMRadio_2.0.bin.1.png": {
+			"sdcard": false
+		},
+		"\\FMRadio_2.0.bin.1.h": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav3D9E.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav9516.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\font_old.png": {
+			"sdcard": false
+		},
+		"\\Raw\\font_old.h": {
+			"sdcard": false
+		},
+		"\\Raw\\dial.png": {
+			"sdcard": false
+		},
+		"\\Raw\\dial.h": {
+			"sdcard": false
+		},
+		"\\Raw\\SavAC2D.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\SavA7E4.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\background_blank.png": {
+			"sdcard": false
+		},
+		"\\Raw\\background_preview.png": {
+			"sdcard": false
+		},
+		"\\Raw\\background_blank.h": {
+			"sdcard": false
+		},
+		"\\Raw\\background_preview.h": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav1F9D.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav3BD2.tmp": {
+			"sdcard": false
+		},
+		"\\graphics.h": {
+			"sdcard": false
+		},
+		"\\SDHCFileSystem.cpp": {
+			"sdcard": false
+		},
+		"\\SDHCFileSystem.h": {
+			"sdcard": false
+		},
+		"\\sound.h": {
+			"sdcard": false
+		},
+		"\\fastad_lcd_dbuf.ino": {
+			"sdcard": false
+		},
+		"\\fft.cpp": {
+			"sdcard": false
+		},
+		"\\fft.h": {
+			"sdcard": false
+		},
+		"\\file_stuff.h": {
+			"sdcard": false
+		},
+		"\\misc.h": {
+			"sdcard": false
+		},
+		"\\globals.h": {
+			"sdcard": false
+		},
+		"\\Raw\\ball.bmp": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav9B4D.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\font3.png": {
+			"sdcard": false
+		},
+		"\\Raw\\font3.h": {
+			"sdcard": false
+		},
+		"\\Raw\\dial.bmp": {
+			"sdcard": false
+		},
+		"\\Raw\\Sav6123.tmp": {
+			"sdcard": false
+		},
+		"\\_fmradio": {
+			"sdcard": true
+		},
+		"\\_fmradio\\settings.ini": {
+			"sdcard": false
+		},
+		"\\_fmradio\\background2.bmp": {
+			"sdcard": false
+		},
+		"\\_fmradio\\button.bmp": {
+			"sdcard": false
+		},
+		"\\_fmradio\\background.bmp": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_12_03_45.wav": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_12_09_25.wav": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_12_11_52.wav": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_12_12_47.wav": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_11_57_52.pk": {
+			"sdcard": false
+		},
+		"\\_fmradio\\recordings\\2020_03_22_12_09_25.pk": {
+			"sdcard": false
+		},
+		"\\Raw\\SavC867.tmp": {
+			"sdcard": false
+		},
+		"\\Raw\\screengrab_mockup.png": {
+			"sdcard": false
+		},
+		"\\Raw\\screengrab_mockup.h": {
+			"sdcard": false
+		},
+		"\\_fmradio\\screenshot.bmp": {
+			"sdcard": false
+		},
+		"\\FMRadioHat.zip": {
+			"sdcard": false
+		},
+		"\\_fmradio\\dir.txt": {
+			"sdcard": false
+		},
+		"\\__rzi_15872.21845": {
+			"sdcard": false
+		},
+		"\\__rzi_5932.22604": {
+			"sdcard": false
+		},
+		"\\buttonhandling.h": {
+			"sdcard": false
+		},
+		"\\Devices": {
+			"sdcard": false
+		},
+		"\\FastIO.h": {
+			"sdcard": false
+		},
+		"\\FastIO_Unsupported.h": {
+			"sdcard": false
+		},
+		"\\ram.h": {
+			"sdcard": false
+		},
+		"\\raw": {
+			"sdcard": false
+		},
+		"\\screen.h": {
+			"sdcard": false
+		},
+		"\\scripts": {
+			"sdcard": false
+		},
+		"\\sprites.h": {
+			"sdcard": false
+		},
+		"\\SWSPI.cpp": {
+			"sdcard": false
+		},
+		"\\SWSPI.h": {
+			"sdcard": false
+		},
+		"\\__RAM_TEST__.bin": {
+			"sdcard": false
+		},
+		"\\__RAM_TEST__.elf": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_K20D50M_KPSDK.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_EFM32.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_KLXX.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC11U6X.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC11UXX.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC11XX.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC1768.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC43XX.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_LPC81X.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_NRF51822.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_NUCLEO_F030.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_STM32F4.h": {
+			"sdcard": false
+		},
+		"\\Devices\\FastIO_STM32L073XX.h": {
+			"sdcard": false
+		},
+		"\\raw\\background.bmp": {
+			"sdcard": false
+		},
+		"\\raw\\font88.bmp": {
+			"sdcard": false
+		},
+		"\\raw\\_img2pok.exe": {
+			"sdcard": false
+		},
+		"\\scripts\\ModConverter.js": {
+			"sdcard": false
+		},
+		"\\scripts\\TilemapConverter.js": {
+			"sdcard": false
+		},
+		"\\QSPI.h": {
+			"sdcard": false
+		},
+		"\\Unconfirmed 564608.crdownload": {
+			"sdcard": false
+		},
+		"\\QSPI.cpp": {
+			"sdcard": false
+		},
+		"\\plasma.h": {
+			"sdcard": false
+		},
+		"\\untitled.logicsettings": {
+			"sdcard": false
+		},
+		"\\__RAM_TEST__NEW.elf": {
+			"sdcard": false
+		},
+		"\\__RAM_TEST__NEW.bin": {
+			"sdcard": false
+		},
+		"\\__RAM_TEST__NEW.zip": {
+			"sdcard": false
+		},
+		"\\ram - Copy.h": {
+			"sdcard": false
+		},
+		"\\ram_hat.cpp": {
+			"sdcard": false
+		},
+		"\\ram_hat.h": {
+			"sdcard": false
+		},
+		"\\ram.i": {
+			"sdcard": false
+		},
+		"\\raw\\background1.bmp": {
+			"sdcard": false
+		},
+		"\\raw\\SavE154.tmp": {
+			"sdcard": false
+		}
+	},
+	"BUILDFlags": {
+		"Pokitto": {}
+	},
+	"ideVersion": 10000
+}

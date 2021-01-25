@@ -8,15 +8,11 @@ uint32_t savePortMask=0;
 #define SPIMODE 0xFF
 
 #define CLOCK 1<<6 // clock pin
-#define TSTPIN 1<<19
 
 #define SIO0 1<<20 // Also MOSI
 #define SIO1 1<<21 // Also MISO
 #define SIO2 1<<22 // 
 #define SIO3 1<<23 // 
-
-#define SET_TEST LPC_GPIO_PORT->SET[1] = TSTPIN
-#define CLR_TEST LPC_GPIO_PORT->CLR[1] = TSTPIN
 
 // SRAM pins 2 and 3 need to be high when in normal SPI mode
 #define SET_SIO2 LPC_GPIO_PORT->SET[1] |= SIO2
@@ -24,8 +20,9 @@ uint32_t savePortMask=0;
 
 #define SET_CLOCK LPC_GPIO_PORT->SET[1] = CLOCK
 #define CLR_CLOCK LPC_GPIO_PORT->CLR[1] = CLOCK
-//#define TOG_CLOCK LPC_GPIO_PORT->NOT[1] = CLOCK
 #define TOG_CLOCK ((volatile uint32_t *) 0xA0002304)[0] = 64
+#define TOG_CLOCK_NOP ((volatile uint32_t *) 0xA0002304)[0] = 64; asm volatile ("nop\n");
+//#define TOG_CLOCK LPC_GPIO_PORT->NOT[1] = CLOCK
 
 #define TOG_CLOCK2 TOG_CLOCK; TOG_CLOCK
 #define TOG_CLOCK4 TOG_CLOCK2; TOG_CLOCK2
@@ -165,23 +162,22 @@ void readFromAddress(uint16_t address, uint8_t* buffer, uint16_t number){
 
 
 inline void writeQuad(uint8_t value){
+
     LPC_GPIO_PORT->MPIN[1] = value << 16;
-    SET_CLOCK;
-    CLR_CLOCK;
+    TOG_CLOCK2;
     LPC_GPIO_PORT->MPIN[1] = value << 20;
-    SET_CLOCK; 
-    CLR_CLOCK;
+    TOG_CLOCK2;
 }
 
 inline void readQuad(uint8_t* buffer, uint16_t number){
     int temp=0;
     for(int t = number; t; --t){
-        CLR_CLOCK;
+        TOG_CLOCK;
         temp = ((volatile uint32_t *) 0xA0002184)[0] >> 16;
-        SET_CLOCK;
-        CLR_CLOCK;
+        TOG_CLOCK;
+        TOG_CLOCK_NOP;
         temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;
-        SET_CLOCK;
+        TOG_CLOCK;
         *buffer++ = temp;
     }
 }
@@ -192,7 +188,7 @@ void clearQuad(){
     writeQuad(0x02); // write command
     writeQuad(0); // First byte of address
     writeQuad(0); // Second byte of address
-    for(int t=0; t<65535; t++){
+    for(int t = 65535; t; --t){
         writeQuad(0);
     }
     SPI_CS=1;
@@ -201,20 +197,16 @@ void clearQuad(){
 void writeToAddressQuad(uint16_t address, const uint8_t* buffer, uint16_t number){
     setWriteMode();
     SPI_CS=0;
-    
+
     // 1 byte for the command, sent in 2 clock ticks
     writeQuad(0x02); // write command
-    
+
     // 2 bytes for the address, sent in 4 clock ticks
     uint8_t temp = address >> 8;
     writeQuad(temp);
     temp = address & 255;
     writeQuad(temp);
     
-    //
-    // There seems to be a phantom clock tick here
-    //
-
     // data sent in number*2 clock ticks
     for(int t=0; t<number; t++){
         writeQuad(buffer[t]);
@@ -228,19 +220,20 @@ void readFromAddressQuad(uint16_t address, uint8_t* buffer, uint16_t number){
     CLR_CLOCK;
     SPI_CS=0;
     setWriteMode();
+
     writeQuad(0x03); // read command
+
     uint8_t temp = address >> 8;
     writeQuad(temp);
     temp = address & 255;
     writeQuad(temp);
     setReadMode();
 
-    SET_CLOCK;
-    CLR_CLOCK;
-    SET_CLOCK;
-    CLR_CLOCK;
+    TOG_CLOCK_NOP;
+    TOG_CLOCK_NOP;
+    TOG_CLOCK_NOP;
+    TOG_CLOCK_NOP;
 
-//    readQuad(&buffer[0], 1); // dummy byte
     readQuad(&buffer[0], number);
     releaseReadMode();
 

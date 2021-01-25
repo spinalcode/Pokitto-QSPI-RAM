@@ -39,6 +39,7 @@
 			"-O3"
 		],
 		"Pokitto": [
+			"-D_OSCT=2",
 			"-I${projectPath}",
 			"-DPOKITTO",
 			"-fno-rtti",
@@ -128,6 +129,7 @@
 			"-O3"
 		],
 		"Pokitto": [
+			"-D_OSCT=2",
 			"-I${projectPath}",
 			"-DPOKITTO",
 			"-Wno-pointer-arith",

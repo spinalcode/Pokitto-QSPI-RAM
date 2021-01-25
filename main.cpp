@@ -29,8 +29,6 @@ void myPrint(char x, char y, const char* text) {
 
 char tempText[64];
 
-DigitalOut TEMP_CS(P1_19);
-
 int main(){
     using PC=Pokitto::Core;
     using PD=Pokitto::Display;
@@ -43,90 +41,45 @@ int main(){
     PD::adjustLineStep = 0;
 
     PD::lineFillers[0] = myBGFiller; // A custom filler to draw from SRAM HAT to screen
-    TEMP_CS = 1;
 
     initRAM();
 
-    TEMP_CS = 0;
-
     // from this point, use qspi to communicate with the ram chip
 
-    //uint8_t tempData[2];
-    //readFromAddressQuad(0, &tempData[0], 1);
-
     // load a loarger than screen image to RAM, this one takes up nearly all of it.
-//    writeToAddressQuad(0, &background1[0], 320*204);
+    writeToAddressQuad(0, &background1[0], 320*204);
+    Pokitto::Display::load565Palette(background1_pal); // load a palette the same way as any other palette in any other screen mode
 
-//    Pokitto::Display::load565Palette(background1_pal); // load a palette the same way as any other palette in any other screen mode
-
-    uint8_t tempData[]={255,255};
-    uint8_t tempData2[]={0,0};
-
-    writeToAddressQuad(240, tempData, sizeof(tempData));
-    TEMP_CS = 1;
-    TEMP_CS = 0;
-    readFromAddressQuad(240, tempData2, sizeof(tempData2));
-    TEMP_CS = 1;
-
-
-    clearQuad();
-    make_pal();
-    make_plasma();
 
     int palOff=0;
+    bool doPlasma = false;
     while( PC::isRunning() ){
         
+        if(!PC::update()) continue;
         updateButtons();
 
         if(_Left[HELD] && sx>0) sx--;
         if(_Right[HELD] && sx<100) sx++;
         if(_Up[HELD] && sy>0) sy--;
         if(_Down[HELD] && sy<28) sy++;
-        
-        if(!PC::update()) continue;
-
-        int num = pal[0];
-        for(int t=0; t<255; t++){
-            pal[t] = pal[t+1];
+        if(_B[NEW]){
+            doPlasma = true;
+            clearQuad();
+            make_pal();
+            make_plasma();
         }
-        pal[255]=num;
-        Pokitto::Display::load565Palette(&pal[0]); // load a palette the same way as any other palette in any other screen mode
-
+        
+        if(doPlasma){
+            int num = pal[0];
+            for(int t=0; t<255; t++){
+                pal[t] = pal[t+1];
+            }
+            pal[255]=num;
+            Pokitto::Display::load565Palette(&pal[0]); // load a palette the same way as any other palette in any other screen mode
+        }
+        
         sprintf(tempText,"FPS:%d",fpsCount);
         myPrint(0,0,tempText);
-/*
-        myPrint(0,8,"Written  Read    ");
-
-        for(int t=0; t<8; t++){
-            int c,k;
-            tempText[0]=0;
-            for(c = 7; c >= 0; c--){
-                k = tempData[t] >> c;
-                if (k & 1){
-                    strcat(tempText, "1");
-                }else{
-                    strcat(tempText, "0");
-                }
-            }
-            strcat(tempText, 0);
-            myPrint(0,16+t*8,tempText);
-        }
-
-        for(int t=0; t<8; t++){
-            int c,k;
-            tempText[0]=0;
-            for(c = 7; c >= 0; c--){
-                k = tempData2[t] >> c;
-                if (k & 1){
-                    strcat(tempText, "1");
-                }else{
-                    strcat(tempText, "0");
-                }
-            }
-            strcat(tempText, 0);
-            myPrint(72,16+t*8,tempText);
-        }
-*/
 
         fpsCounter++;
         frameCount++;

@@ -191,15 +191,53 @@ inline void writeQuad(uint8_t value){
 }
 
 inline void readQuad(uint8_t* buffer, uint32_t number){
-    int temp=0;
-    for(int t = number; t; --t){
+    unsigned int temp=0;
+
+    int t= -number;
+    buffer+=number;
+    while(t < -9){
+
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
+        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        
+    }
+    
+    for(; t; ++t){
         TOG_CLOCK;
-        temp = ((volatile uint32_t *) 0xA0002184)[0] >> 16;
-        TOG_CLOCK_NOP;
+        temp = ((volatile uint32_t *) 0xA0002184)[0];
+        TOG_CLOCK;
+        temp = temp >> 16;
         TOG_CLOCK_NOP;
         temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;
         TOG_CLOCK;
-        *buffer++ = temp;
+        buffer[t] = temp;
     }
 }
 

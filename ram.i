@@ -193,39 +193,34 @@ inline void writeQuad(uint8_t value){
 inline void readQuad(uint8_t* buffer, uint32_t number){
     unsigned int temp=0;
 
+    #define read1pixel()\
+        TOG_CLOCK;\
+        temp = ((volatile uint32_t *) 0xA0002184)[0];\
+        TOG_CLOCK;\
+        temp = temp >> 16;\
+        TOG_CLOCK_NOP;\
+        temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;\
+        TOG_CLOCK;\
+        buffer[t++] = temp;
+
+    #define read2pixel()\
+        read1pixel(); read1pixel();
+
+    #define read10pixel()\
+        read2pixel(); read2pixel(); read2pixel(); read2pixel(); read2pixel();
+
     int t= -number;
     buffer+=number;
+    while(t < -19){
+
+        read10pixel();
+        read10pixel();
+
+    }
+
     while(t < -9){
 
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
-        
-        TOG_CLOCK; temp = ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; temp = temp << 4;
-        TOG_CLOCK_NOP; temp |= ((volatile uint32_t *) 0xA0002184)[0]; TOG_CLOCK; buffer[t++] = temp >> 20;
+        read10pixel();
         
     }
     

@@ -3,6 +3,8 @@
 This code uses software QSPI and manages 45FPS
 */
 
+#define screenWidth 400
+
 int sx=0;
 int sy=0;
 
@@ -46,8 +48,8 @@ int main(){
 
     // from this point, use qspi to communicate with the ram chip
 
-    // load a loarger than screen image to RAM, this one takes up nearly all of it.
-    writeToAddressQuad(0, &background1[0], 320*204);
+    // load a larger than screen image to RAM, this one takes up nearly all of it.
+    writeToAddressQuad(0, &background1[0], 400*300);
     Pokitto::Display::load565Palette(background1_pal); // load a palette the same way as any other palette in any other screen mode
 
 
@@ -59,9 +61,9 @@ int main(){
         updateButtons();
 
         if(_Left[HELD] && sx>0) sx--;
-        if(_Right[HELD] && sx<100) sx++;
+        if(_Right[HELD] && sx<180) sx++;
         if(_Up[HELD] && sy>0) sy--;
-        if(_Down[HELD] && sy<28) sy++;
+        if(_Down[HELD] && sy<124) sy++;
         if(_B[NEW]){
             doPlasma = true;
             clearQuad();

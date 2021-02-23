@@ -733,6 +733,12 @@
 		},
 		"\\raw\\SavE154.tmp": {
 			"sdcard": false
+		},
+		"\\raw\\Image1.bmp": {
+			"sdcard": false
+		},
+		"\\raw\\SavFA8.tmp": {
+			"sdcard": false
 		}
 	},
 	"BUILDFlags": {

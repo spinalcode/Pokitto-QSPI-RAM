@@ -1,5 +1,7 @@
 uint32_t savePortMask=0;
 
+#define SIZEOFRAM 1024 // 1024 for 128k, 512 for 64k
+
 #define BYTEMODE 0
 #define SEQMODE 64
 #define PAGEMODE 128
@@ -14,14 +16,15 @@ uint32_t savePortMask=0;
 #define SIO2 1<<22 // 
 #define SIO3 1<<23 // 
 
+
 // SRAM pins 2 and 3 need to be high when in normal SPI mode
 #define SET_SIO2 LPC_GPIO_PORT->SET[1] |= SIO2
 #define SET_SIO3 LPC_GPIO_PORT->SET[1] |= SIO3
 
 #define SET_CLOCK LPC_GPIO_PORT->SET[1] = CLOCK
 #define CLR_CLOCK LPC_GPIO_PORT->CLR[1] = CLOCK
-#define TOG_CLOCK ((volatile uint32_t *) 0xA0002304)[0] = 64
-#define TOG_CLOCK_NOP ((volatile uint32_t *) 0xA0002304)[0] = 64; asm volatile ("nop\n");
+#define TOG_CLOCK ((volatile uint32_t *) 0xA0002304)[0] = CLOCK
+#define TOG_CLOCK_NOP ((volatile uint32_t *) 0xA0002304)[0] = CLOCK; asm volatile ("nop\n");
 //#define TOG_CLOCK LPC_GPIO_PORT->NOT[1] = CLOCK
 
 #define TOG_CLOCK2 TOG_CLOCK; TOG_CLOCK
@@ -32,6 +35,8 @@ uint32_t savePortMask=0;
 
 #define GET_MISO (((volatile uint32_t *) 0xA0002104)[0] & SIO1) >> 21
 #define SET_MASK_SIO LPC_GPIO_PORT->MASK[1] = (0x0F << 20); //mask P1_20...P1_23
+
+DigitalOut SPI_CS(P1_5); // Select pin for the RAM chip
 
 /*
    __ __
@@ -63,7 +68,6 @@ Command	Function
 
 */
 
-DigitalOut SPI_CS(P1_5);
 
 void setReadMode(){
     LPC_GPIO_PORT->DIR[1] &= ~(0x0f<<20);
@@ -134,23 +138,38 @@ void setMode(uint8_t mode){
     }
 }
 
-void writeToAddress(uint16_t address, const uint8_t* buffer, uint16_t number){
+void writeToAddress(uint32_t address, const uint8_t* buffer, uint32_t number){
     SPI_CS=0;
     spi_write(0x02);
-    uint8_t temp = address >> 8;
+    uint8_t temp;
+    
+    
+    #if SIZEOFRAM == 1024
+        temp = address >> 16;
+        spi_write(temp);
+    #endif
+    
+    temp = address >> 8;
     spi_write(temp);
     temp = address & 255;
     spi_write(temp);
+    
     for(int t=0; t<number; t++){
         spi_write(buffer[t]);
     }
     SPI_CS=1;
 }
 
-void readFromAddress(uint16_t address, uint8_t* buffer, uint16_t number){
+void readFromAddress(uint32_t address, uint8_t* buffer, uint32_t number){
     SPI_CS=0;
     spi_write(0x03);
-    uint8_t temp = address >> 8;
+
+
+    #if SIZEOFRAM == 1024
+        uint8_t temp = address >> 16;
+        spi_write(temp);
+    #endif
+    temp = address >> 8;
     spi_write(temp);
     temp = address & 255;
     spi_write(temp);
@@ -164,17 +183,19 @@ void readFromAddress(uint16_t address, uint8_t* buffer, uint16_t number){
 inline void writeQuad(uint8_t value){
 
     LPC_GPIO_PORT->MPIN[1] = value << 16;
-    TOG_CLOCK2;
+    TOG_CLOCK;
+    TOG_CLOCK;
     LPC_GPIO_PORT->MPIN[1] = value << 20;
-    TOG_CLOCK2;
+    TOG_CLOCK;
+    TOG_CLOCK;
 }
 
-inline void readQuad(uint8_t* buffer, uint16_t number){
+inline void readQuad(uint8_t* buffer, uint32_t number){
     int temp=0;
     for(int t = number; t; --t){
         TOG_CLOCK;
         temp = ((volatile uint32_t *) 0xA0002184)[0] >> 16;
-        TOG_CLOCK;
+        TOG_CLOCK_NOP;
         TOG_CLOCK_NOP;
         temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;
         TOG_CLOCK;
@@ -188,21 +209,36 @@ void clearQuad(){
     writeQuad(0x02); // write command
     writeQuad(0); // First byte of address
     writeQuad(0); // Second byte of address
+    #if SIZEOFRAM == 1024
+        writeQuad(0); // Third byte of address
+        // with 24bit address there is an extra b111111110000000000000000 to clear
+        for(int t = 16711680; t; --t){
+            writeQuad(0);
+        }
+    #endif
+
     for(int t = 65535; t; --t){
         writeQuad(0);
     }
     SPI_CS=1;
 }
 
-void writeToAddressQuad(uint16_t address, const uint8_t* buffer, uint16_t number){
+void writeToAddressQuad(uint32_t address, const uint8_t* buffer, uint32_t number){
     setWriteMode();
     SPI_CS=0;
-
+    uint8_t temp;
+    
     // 1 byte for the command, sent in 2 clock ticks
     writeQuad(0x02); // write command
 
-    // 2 bytes for the address, sent in 4 clock ticks
-    uint8_t temp = address >> 8;
+    // 3 bytes for the address, sent in 6 clock ticks
+    // if address = 24bit
+    #if SIZEOFRAM == 1024
+        temp = (address >> 16) & 255;
+        writeQuad(temp);
+    #endif
+    
+    temp = (address >> 8) & 255;
     writeQuad(temp);
     temp = address & 255;
     writeQuad(temp);
@@ -216,19 +252,26 @@ void writeToAddressQuad(uint16_t address, const uint8_t* buffer, uint16_t number
     SPI_CS=1;
 }
 
-void readFromAddressQuad(uint16_t address, uint8_t* buffer, uint16_t number){
+void readFromAddressQuad(uint32_t address, uint8_t* buffer, uint32_t number){
     CLR_CLOCK;
     SPI_CS=0;
+    uint8_t temp;
     setWriteMode();
 
     writeQuad(0x03); // read command
 
-    uint8_t temp = address >> 8;
+    // if address = 24bit
+    #if SIZEOFRAM == 1024
+        temp = (address >> 16) & 255;
+        writeQuad(temp);
+    #endif
+    temp = (address >> 8) & 255;
     writeQuad(temp);
     temp = address & 255;
     writeQuad(temp);
     setReadMode();
 
+    // pretend to read the first byte, its a dummy
     TOG_CLOCK_NOP;
     TOG_CLOCK_NOP;
     TOG_CLOCK_NOP;

@@ -7,7 +7,7 @@
 */
 
 void myBGFiller(std::uint8_t* line, std::uint32_t y, bool skip){
-    readFromAddressQuad(sx+320*(y+sy), line, 220);
+    readFromAddressQuad(sx+screenWidth*(y+sy), line, 220);
     //memset(&line[0],0,220);
 }
 

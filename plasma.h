@@ -3,13 +3,13 @@ unsigned short pal[256*2]; // assign a 256 entry array to hold the palette
 int PntClr(int x, int y){
 //	return Pokitto::Display::getPixel(x,y);
     uint8_t temp[1];
-    readFromAddressQuad(x+320*y,temp,1);
+    readFromAddressQuad(x+screenWidth*y,temp,1);
 //    readFromAddress(x+220*y,temp,1);
     return (int)temp[0];
 }
 void Dot (int x, int y, uint8_t c){
 	//game.display.drawPixel(x,y,c);
-	writeToAddressQuad(x+320*y, &c, 1);
+	writeToAddressQuad(x+screenWidth*y, &c, 1);
 	//writeToAddress(x+220*y, temp, 1);
 }
 int RandMinMax(int min, int max){
@@ -44,12 +44,12 @@ void SubDivide (int x1, int y1, int x2, int y2){
 	SubDivide(x, y1, x2, y);
 	SubDivide(x1, y, x, y2);
 }
-void make_plasma(int x1=0,int y1=0,int x2=319,int y2=203){
+void make_plasma(int x1=0,int y1=0,int x2=399,int y2=299){
 	//game.display.clear();
 	if(x1<0)x1=0;
 	if(y1<0)y1=0;
-	if(x2>319)x2=319;
-	if(y2>203)y2=203;
+	if(x2>399)x2=399;
+	if(y2>299)y2=299;
 
 	Dot(x1, y1, RandMinMax(0,255));
 	Dot(x2, y1, RandMinMax(0,255));

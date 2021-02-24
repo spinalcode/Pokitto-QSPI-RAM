@@ -190,18 +190,19 @@ inline void writeQuad(uint8_t value){
     TOG_CLOCK;
 }
 
-inline void readQuad(uint8_t* buffer, uint32_t number){
+void readQuad(uint8_t* buffer, uint32_t number){
     unsigned int temp=0;
 
     #define read1pixel()\
         TOG_CLOCK;\
         temp = ((volatile uint32_t *) 0xA0002184)[0];\
         TOG_CLOCK;\
-        temp = temp >> 16;\
+        temp = (temp >> 16);\
         TOG_CLOCK_NOP;\
         temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;\
         TOG_CLOCK;\
         buffer[t++] = temp;
+        
 
     #define read2pixel()\
         read1pixel(); read1pixel();
@@ -211,29 +212,15 @@ inline void readQuad(uint8_t* buffer, uint32_t number){
 
     int t= -number;
     buffer+=number;
-    while(t < -19){
-
-        read10pixel();
-        read10pixel();
-
-    }
 
     while(t < -9){
-
         read10pixel();
-        
     }
     
-    for(; t; ++t){
-        TOG_CLOCK;
-        temp = ((volatile uint32_t *) 0xA0002184)[0];
-        TOG_CLOCK;
-        temp = temp >> 16;
-        TOG_CLOCK_NOP;
-        temp |= ((volatile uint32_t *) 0xA0002184)[0] >> 20;
-        TOG_CLOCK;
-        buffer[t] = temp;
+    for(; t;){
+        read1pixel();
     }
+
 }
 
 void clearQuad(){
@@ -243,16 +230,19 @@ void clearQuad(){
     writeQuad(0); // First byte of address
     writeQuad(0); // Second byte of address
     #if SIZEOFRAM == 1024
+        // 128k RAM
         writeQuad(0); // Third byte of address
-        // with 24bit address there is an extra b111111110000000000000000 to clear
-        for(int t = 16711680; t; --t){
+        // with 24bit address there is extra to clear
+        for(int t = 131071; t; --t){
+            writeQuad(0);
+        }
+    #else
+        // 64k RAM
+        for(int t = 65535; t; --t){
             writeQuad(0);
         }
     #endif
 
-    for(int t = 65535; t; --t){
-        writeQuad(0);
-    }
     SPI_CS=1;
 }
 
@@ -260,6 +250,9 @@ void writeToAddressQuad(uint32_t address, const uint8_t* buffer, uint32_t number
     setWriteMode();
     SPI_CS=0;
     uint8_t temp;
+    
+    // max address in 128k RAM is 131071 or 000000011111111111111111 or 1FFFF
+    address &= 131071;
     
     // 1 byte for the command, sent in 2 clock ticks
     writeQuad(0x02); // write command
